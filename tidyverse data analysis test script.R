@@ -38,3 +38,9 @@ summary(res)
 # Order by p-value
 resOrdered <- res[order(res$pvalue), ]
 head(resOrdered)
+
+# -----------------------------
+# 6. Normalization & transformations
+# -----------------------------
+vsd <- vst(dds, blind = TRUE)    # Variance stabilizing transformation
+rld <- rlog(dds, blind = TRUE)   # Regularized log transformation
