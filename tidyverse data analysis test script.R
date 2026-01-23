@@ -69,3 +69,32 @@ mat <- mat - rowMeans(mat)
 pheatmap(mat, annotation_col = as.data.frame(colData(dds)[, "dex", drop = FALSE]),
          main = "Top 20 Variable Genes Heatmap",
          color = colorRampPalette(rev(brewer.pal(9, "RdBu")))(255))
+
+# -----------------------------
+# 8. Gene Set Enrichment Analysis (GSEA)
+# -----------------------------
+# Prepare named vector for GSEA (log2 fold change)
+gene_list <- res$log2FoldChange
+names(gene_list) <- rownames(res)
+gene_list <- sort(na.omit(gene_list), decreasing = TRUE)
+
+gse_res <- gseGO(geneList = gene_list,
+                 OrgDb = org.Hs.eg.db,
+                 ont = "BP",
+                 keyType = "ENSEMBL",
+                 eps = 1e-300)
+
+# View top GSEA results
+head(as.data.frame(gse_res))
+
+# Dotplot of enriched pathways
+dotplot(gse_res, showCategory = 10) + ggtitle("Top 10 Enriched GO Terms")
+
+# -----------------------------
+# 9. Export results
+# -----------------------------
+write.csv(as.data.frame(resOrdered), file = "Airway_DESeq2_results.csv")
+write.csv(as.data.frame(gse_res), file = "Airway_GSEA_results.csv")
+
+
+
