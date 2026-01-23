@@ -44,3 +44,28 @@ head(resOrdered)
 # -----------------------------
 vsd <- vst(dds, blind = TRUE)    # Variance stabilizing transformation
 rld <- rlog(dds, blind = TRUE)   # Regularized log transformation
+
+# -----------------------------
+# 7. Visualizations
+# -----------------------------
+
+## 7a. PCA plot
+pca_data <- plotPCA(rld, intgroup = "dex", returnData = TRUE)
+percentVar <- round(100 * attr(pca_data, "percentVar"))
+ggplot(pca_data, aes(PC1, PC2, color = dex)) +
+  geom_point(size = 4) +
+  xlab(paste0("PC1: ", percentVar[1], "% variance")) +
+  ylab(paste0("PC2: ", percentVar[2], "% variance")) +
+  ggtitle("PCA of Airway Samples") +
+  theme_minimal()
+
+## 7b. MA plot
+plotMA(res, main = "Airway DESeq2 MA Plot")
+
+## 7c. Heatmap of top 20 variable genes
+topGenes <- head(order(rowVars(assay(vsd)), decreasing = TRUE), 20)
+mat <- assay(vsd)[topGenes, ]
+mat <- mat - rowMeans(mat)
+pheatmap(mat, annotation_col = as.data.frame(colData(dds)[, "dex", drop = FALSE]),
+         main = "Top 20 Variable Genes Heatmap",
+         color = colorRampPalette(rev(brewer.pal(9, "RdBu")))(255))
