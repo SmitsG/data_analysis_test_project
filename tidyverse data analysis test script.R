@@ -23,3 +23,18 @@ dds <- DESeqDataSet(airway, design = ~ dex)  # 'dex' = dexamethasone treatment
 
 # Pre-filter: remove genes with very low counts
 dds <- dds[rowSums(counts(dds)) > 1, ]
+
+# -----------------------------
+# 4. Run DESeq2
+# -----------------------------
+dds <- DESeq(dds)
+
+# -----------------------------
+# 5. Explore DESeq2 results
+# -----------------------------
+res <- results(dds)
+summary(res)
+
+# Order by p-value
+resOrdered <- res[order(res$pvalue), ]
+head(resOrdered)
