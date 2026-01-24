@@ -120,3 +120,21 @@ pheatmap(sampleDistMatrix,
          clustering_distance_rows = sampleDists,
          clustering_distance_cols = sampleDists,
          main = "Sample Distance Heatmap")
+
+# -----------------------------
+# 12. GO Overrepresentation Analysis (Upregulated Genes)
+# -----------------------------
+
+# Select significantly upregulated genes
+sig_genes <- rownames(res)[which(res$padj < 0.05 & res$log2FoldChange > 0)]
+
+# Enrichment in Biological Process (BP)
+ego <- enrichGO(gene = sig_genes,
+                OrgDb = org.Hs.eg.db,
+                keyType = "ENSEMBL",
+                ont = "BP",
+                pAdjustMethod = "BH",
+                qvalueCutoff = 0.05)
+
+# Dotplot of top GO terms
+dotplot(ego, showCategory = 10) + ggtitle("GO Enrichment - Upregulated Genes")
