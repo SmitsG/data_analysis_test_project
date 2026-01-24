@@ -99,3 +99,15 @@ dotplot(gse_res, showCategory = 10) + ggtitle("Top 10 Enriched GO Terms")
 write.csv(as.data.frame(resOrdered), file = "Airway_DESeq2_results.csv")
 write.csv(as.data.frame(gse_res), file = "Airway_GSEA_results.csv")
 
+# -----------------------------
+# 10a. Volcano Plot of DE Genes
+# -----------------------------
+EnhancedVolcano(res,
+                lab = rownames(res),
+                x = 'log2FoldChange',
+                y = 'pvalue',
+                pCutoff = 0.05,
+                FCcutoff = 1.5,
+                title = "Volcano plot of DE genes")
+
+
