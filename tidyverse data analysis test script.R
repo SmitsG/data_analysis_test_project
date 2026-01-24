@@ -139,6 +139,7 @@ ego <- enrichGO(gene = sig_genes,
 # Dotplot of top GO terms
 dotplot(ego, showCategory = 10) + ggtitle("GO Enrichment - Upregulated Genes")
 
+
 # -----------------------------
 # 13. KEGG Pathway Enrichment
 # -----------------------------
@@ -162,3 +163,24 @@ kegg_res <- enrichKEGG(gene = names(gene_list_entrez),
 
 # Dotplot of top KEGG pathways
 dotplot(kegg_res, showCategory = 10) + ggtitle("KEGG Pathway Enrichment")
+
+# -----------------------------
+# 14. Save individual plots as PNGs
+# -----------------------------
+
+# Volcano plot
+ggsave("Volcano_plot.png", plot = last_plot(), width = 7, height = 5)
+
+# Heatmap of top 20 variable genes (from step 7c)
+pheatmap(mat,
+         annotation_col = as.data.frame(colData(dds)[, "dex", drop = FALSE]),
+         main = "Top 20 Variable Genes Heatmap",
+         color = colorRampPalette(rev(brewer.pal(9, "RdBu")))(255),
+         filename = "Top20_VariableGenes_Heatmap.png")
+
+# GO enrichment dotplot
+ggsave("GO_Enrichment_Dotplot.png", plot = last_plot(), width = 7, height = 5)
+
+# KEGG enrichment dotplot
+ggsave("KEGG_Enrichment_Dotplot.png", plot = last_plot(), width = 7, height = 5)
+
