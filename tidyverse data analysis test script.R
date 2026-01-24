@@ -205,4 +205,12 @@ head(as.data.frame(gse_kegg), 10)
 dotplot(gse_kegg, showCategory = 10) + ggtitle("KEGG GSEA - Ranked Genes")
 ggsave("GSEA_KEGG_Dotplot.png", width = 8, height = 6)
 
+# -----------------------------
+# 16. Save up- and down-regulated genes
+# -----------------------------
 
+up_genes <- rownames(res)[which(res$padj < 0.05 & res$log2FoldChange > 0)]
+down_genes <- rownames(res)[which(res$padj < 0.05 & res$log2FoldChange < 0)]
+
+write.csv(up_genes, "Upregulated_genes.csv", row.names = FALSE)
+write.csv(down_genes, "Downregulated_genes.csv", row.names = FALSE)
