@@ -6,6 +6,9 @@ library(RColorBrewer)
 library(clusterProfiler)
 library(org.Hs.eg.db)
 library(SummarizedExperiment)
+library(EnhancedVolcano)
+library(KEGGREST)
+
 
 # -----------------------------
 # 2. Load airway dataset
@@ -95,6 +98,4 @@ dotplot(gse_res, showCategory = 10) + ggtitle("Top 10 Enriched GO Terms")
 # -----------------------------
 write.csv(as.data.frame(resOrdered), file = "Airway_DESeq2_results.csv")
 write.csv(as.data.frame(gse_res), file = "Airway_GSEA_results.csv")
-
-
 
