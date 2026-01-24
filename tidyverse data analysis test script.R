@@ -138,3 +138,27 @@ ego <- enrichGO(gene = sig_genes,
 
 # Dotplot of top GO terms
 dotplot(ego, showCategory = 10) + ggtitle("GO Enrichment - Upregulated Genes")
+
+# -----------------------------
+# 13. KEGG Pathway Enrichment
+# -----------------------------
+
+# Map ENSEMBL IDs to Entrez IDs
+ensembl_genes_clean <- gsub("\\..*$", "", rownames(res))
+entrez_map <- bitr(ensembl_genes_clean,
+                   fromType = "ENSEMBL",
+                   toType = "ENTREZID",
+                   OrgDb = org.Hs.eg.db)
+
+gene_list_entrez <- res$log2FoldChange[match(entrez_map$ENSEMBL, ensembl_genes_clean)]
+names(gene_list_entrez) <- entrez_map$ENTREZID
+gene_list_entrez <- sort(na.omit(gene_list_entrez), decreasing = TRUE)
+
+# KEGG enrichment
+kegg_res <- enrichKEGG(gene = names(gene_list_entrez),
+                       organism = 'hsa',
+                       keyType = 'ncbi-geneid',
+                       pvalueCutoff = 0.05)
+
+# Dotplot of top KEGG pathways
+dotplot(kegg_res, showCategory = 10) + ggtitle("KEGG Pathway Enrichment")
