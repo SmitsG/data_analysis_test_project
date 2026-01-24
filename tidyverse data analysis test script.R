@@ -100,7 +100,7 @@ write.csv(as.data.frame(resOrdered), file = "Airway_DESeq2_results.csv")
 write.csv(as.data.frame(gse_res), file = "Airway_GSEA_results.csv")
 
 # -----------------------------
-# 10a. Volcano Plot of DE Genes
+# 10. Volcano Plot of DE Genes
 # -----------------------------
 EnhancedVolcano(res,
                 lab = rownames(res),
@@ -110,4 +110,13 @@ EnhancedVolcano(res,
                 FCcutoff = 1.5,
                 title = "Volcano plot of DE genes")
 
+# -----------------------------
+# 11. Sample Distance Heatmap
+# -----------------------------
+sampleDists <- dist(t(assay(vsd)))
+sampleDistMatrix <- as.matrix(sampleDists)
 
+pheatmap(sampleDistMatrix,
+         clustering_distance_rows = sampleDists,
+         clustering_distance_cols = sampleDists,
+         main = "Sample Distance Heatmap")
