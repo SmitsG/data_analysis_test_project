@@ -214,3 +214,32 @@ down_genes <- rownames(res)[which(res$padj < 0.05 & res$log2FoldChange < 0)]
 
 write.csv(up_genes, "Upregulated_genes.csv", row.names = FALSE)
 write.csv(down_genes, "Downregulated_genes.csv", row.names = FALSE)
+
+# -----------------------------
+# 17. Save all key plots in one PDF
+# -----------------------------
+
+pdf("Airway_DE_Analysis_Plots.pdf", width = 10, height = 8)
+
+# Volcano plot
+EnhancedVolcano(res,
+                lab = rownames(res),
+                x = 'log2FoldChange',
+                y = 'pvalue',
+                pCutoff = 0.05,
+                FCcutoff = 1.5,
+                title = "Volcano plot of DE genes")
+
+# Heatmap
+pheatmap(mat,
+         annotation_col = as.data.frame(colData(dds)[, "dex", drop = FALSE]),
+         main = "Top 20 Variable Genes Heatmap",
+         color = colorRampPalette(rev(brewer.pal(9, "RdBu")))(255))
+
+# GO enrichment
+dotplot(ego, showCategory = 10) + ggtitle("GO Enrichment - Upregulated Genes")
+
+# KEGG enrichment
+dotplot(kegg_res, showCategory = 10) + ggtitle("KEGG Pathway Enrichment")
+
+dev.off()
