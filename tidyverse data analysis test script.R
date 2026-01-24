@@ -9,7 +9,6 @@ library(SummarizedExperiment)
 library(EnhancedVolcano)
 library(KEGGREST)
 
-
 # -----------------------------
 # 2. Load airway dataset
 # -----------------------------
@@ -183,4 +182,27 @@ ggsave("GO_Enrichment_Dotplot.png", plot = last_plot(), width = 7, height = 5)
 
 # KEGG enrichment dotplot
 ggsave("KEGG_Enrichment_Dotplot.png", plot = last_plot(), width = 7, height = 5)
+
+# -----------------------------
+# 15. GSEA for KEGG Pathways (Ranked Genes)
+# -----------------------------
+
+# Remove duplicates
+gene_list_entrez <- gene_list_entrez[!duplicated(names(gene_list_entrez))]
+
+# Run GSEA for KEGG with higher pvalue cutoff
+gse_kegg <- gseKEGG(
+  geneList = gene_list_entrez,
+  organism = "hsa",
+  keyType = "ncbi-geneid",
+  pvalueCutoff = 0.2,  # increase to avoid "no term enriched"
+  minGSSize = 10,
+  maxGSSize = 500
+)
+
+# View top pathways
+head(as.data.frame(gse_kegg), 10)
+dotplot(gse_kegg, showCategory = 10) + ggtitle("KEGG GSEA - Ranked Genes")
+ggsave("GSEA_KEGG_Dotplot.png", width = 8, height = 6)
+
 
