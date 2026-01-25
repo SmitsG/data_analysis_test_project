@@ -289,3 +289,17 @@ cnetplot(ego,
          color.params = list(foldChange = fc_vector)) +
   ggtitle("GO Enrichment Network")
 
+# -----------------------------
+# 20. GO Term Clustering (emapplot)
+# -----------------------------
+
+# Simplify redundant GO terms
+ego_simplified <- simplify(ego, cutoff = 0.7, by = "p.adjust", select_fun = min)
+
+# Compute term similarity
+ego_sim <- pairwise_termsim(ego_simplified)
+
+# Plot functional clusters
+emapplot(ego_sim, showCategory = 10) + ggtitle("GO Term Functional Clusters")
+
+
