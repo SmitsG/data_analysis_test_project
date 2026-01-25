@@ -8,6 +8,7 @@ library(org.Hs.eg.db)
 library(SummarizedExperiment)
 library(EnhancedVolcano)
 library(KEGGREST)
+library(enrichplot)
 
 # -----------------------------
 # 2. Load airway dataset
@@ -189,6 +190,8 @@ ggsave("KEGG_Enrichment_Dotplot.png", plot = last_plot(), width = 7, height = 5)
 
 # Remove duplicates
 gene_list_entrez <- gene_list_entrez[!duplicated(names(gene_list_entrez))]
+# Remove duplicates
+gene_list_entrez <- sort(na.omit(gene_list_entrez), decreasing = TRUE)
 
 # Run GSEA for KEGG with higher pvalue cutoff
 gse_kegg <- gseKEGG(
@@ -243,3 +246,34 @@ dotplot(ego, showCategory = 10) + ggtitle("GO Enrichment - Upregulated Genes")
 dotplot(kegg_res, showCategory = 10) + ggtitle("KEGG Pathway Enrichment")
 
 dev.off()
+
+# -----------------------------
+# 18. Save ranked gene list for GSEA
+# -----------------------------
+ranked_genes <- data.frame(
+  EntrezID = names(gene_list_entrez),
+  log2FC = gene_list_entrez
+)
+
+write.csv(ranked_genes, "Ranked_genes_for_GSEA.csv", row.names = FALSE)
+
+
+
+
+# Map EntrezID to symbols
+gene_symbols <- mapIds(org.Hs.eg.db,
+                       keys = names(gene_list_entrez_unique),
+                       column = "SYMBOL",
+                       keytype = "ENTREZID",
+                       multiVals = "first")
+
+# Create a data.frame
+ranked_genes_df <- data.frame(
+  EntrezID = names(gene_list_entrez_unique),
+  log2FC = as.numeric(gene_list_entrez_unique),
+  Symbol = gene_symbols
+)
+
+# Save to CSV
+write.csv(ranked_genes_df, "Ranked_Genes_for_GSEA.csv", row.names = FALSE)
+
