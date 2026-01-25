@@ -277,3 +277,15 @@ ranked_genes_df <- data.frame(
 # Save to CSV
 write.csv(ranked_genes_df, "Ranked_Genes_for_GSEA.csv", row.names = FALSE)
 
+# -----------------------------
+# 19. GO Enrichment Network (Cnetplot)
+# -----------------------------
+
+# Map fold changes to significant genes
+fc_vector <- gene_list[match(sig_genes, names(gene_list))]
+
+cnetplot(ego,
+         showCategory = 5,                # Top 5 GO terms
+         color.params = list(foldChange = fc_vector)) +
+  ggtitle("GO Enrichment Network")
+
