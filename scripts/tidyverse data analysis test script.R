@@ -10,6 +10,8 @@ library(EnhancedVolcano)
 library(KEGGREST)
 library(enrichplot)
 library(here)
+library(vsn)
+library(DOSE)
 
 # -----------------------------
 # 2. Load airway dataset
@@ -302,5 +304,3 @@ ego_sim <- pairwise_termsim(ego_simplified)
 
 # Plot functional clusters
 emapplot(ego_sim, showCategory = 10) + ggtitle("GO Term Functional Clusters")
-
-
