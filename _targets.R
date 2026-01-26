@@ -4,6 +4,8 @@ library(here)
 
 tar_option_set(
   packages = c(
+    "stats", 
+    "utils",
     "airway",
     "DESeq2",
     "SummarizedExperiment",
