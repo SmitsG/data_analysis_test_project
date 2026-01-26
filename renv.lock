@@ -590,6 +590,48 @@
       "NeedsCompilation": "yes",
       "Author": "Hervé Pagès [aut, cre], Aaron Lun [ctb], Peter Hickey [ctb]"
     },
+    "EnhancedVolcano": {
+      "Package": "EnhancedVolcano",
+      "Version": "1.20.0",
+      "Source": "Bioconductor",
+      "Type": "Package",
+      "Title": "Publication-ready volcano plots with enhanced colouring and labeling",
+      "Authors@R": "c( person(\"Kevin\", \"Blighe\", role = c(\"aut\", \"cre\"), email = \"kevin@clinicalbioinformatics.co.uk\"), person(\"Sharmila\", \"Rana\", role = c(\"aut\")), person(\"Emir\", \"Turkes\", role = c(\"ctb\")), person(\"Benjamin\", \"Ostendorf\", role = c(\"ctb\")), person(\"Andrea\", \"Grioni\", role = c(\"ctb\")), person(\"Myles\", \"Lewis\", role = c(\"aut\")))",
+      "Maintainer": "Kevin Blighe <kevin@clinicalbioinformatics.co.uk>",
+      "Description": "Volcano plots represent a useful way to visualise the results of differential expression analyses. Here, we present a highly-configurable function that produces publication-ready volcano plots. EnhancedVolcano will attempt to fit as many point labels in the plot window as possible, thus avoiding 'clogging' up the plot with labels that could not otherwise have been read. Other functionality allows the user to identify up to 4 different types of attributes in the same plot space via colour, shape, size, and shade parameter configurations.",
+      "License": "GPL-3",
+      "Depends": [
+        "ggplot2",
+        "ggrepel"
+      ],
+      "Imports": [
+        "methods"
+      ],
+      "Suggests": [
+        "ggalt",
+        "ggrastr",
+        "RUnit",
+        "BiocGenerics",
+        "knitr",
+        "DESeq2",
+        "pasilla",
+        "airway",
+        "org.Hs.eg.db",
+        "gridExtra",
+        "magrittr",
+        "rmarkdown"
+      ],
+      "URL": "https://github.com/kevinblighe/EnhancedVolcano",
+      "biocViews": "RNASeq, GeneExpression, Transcription, DifferentialExpression, ImmunoOncology",
+      "VignetteBuilder": "knitr",
+      "RoxygenNote": "7.1.2",
+      "git_url": "https://git.bioconductor.org/packages/EnhancedVolcano",
+      "git_branch": "RELEASE_3_18",
+      "git_last_commit": "f0abfa5",
+      "git_last_commit_date": "2023-10-24",
+      "NeedsCompilation": "no",
+      "Author": "Kevin Blighe [aut, cre], Sharmila Rana [aut], Emir Turkes [ctb], Benjamin Ostendorf [ctb], Andrea Grioni [ctb], Myles Lewis [aut]"
+    },
     "GO.db": {
       "Package": "GO.db",
       "Version": "3.18.0",
@@ -1543,6 +1585,76 @@
       "Repository": "RSPM",
       "Encoding": "UTF-8"
     },
+    "affy": {
+      "Package": "affy",
+      "Version": "1.80.0",
+      "Source": "Bioconductor",
+      "Title": "Methods for Affymetrix Oligonucleotide Arrays",
+      "Author": "Rafael A. Irizarry <rafa@ds.dfci.harvard.edu>, Laurent Gautier <lgautier@gmail.com>, Benjamin Milo Bolstad <bmb@bmbolstad.com>, and Crispin Miller <cmiller@picr.man.ac.uk> with contributions from Magnus Astrand <Magnus.Astrand@astrazeneca.com>, Leslie M. Cope <cope@mts.jhu.edu>, Robert Gentleman, Jeff Gentry, Conrad Halling <challing@agilixcorp.com>, Wolfgang Huber, James MacDonald <jmacdon@u.washington.edu>, Benjamin I. P. Rubinstein, Christopher Workman <workman@cbs.dtu.dk>, John Zhang",
+      "Maintainer": "Robert D. Shear <rshear@ds.dfci.harvard.edu>",
+      "URL": "https://bioconductor.org/packages/affy",
+      "BugReports": "https://github.com/rafalab/affy/issues",
+      "Depends": [
+        "R (>= 2.8.0)",
+        "BiocGenerics (>= 0.1.12)",
+        "Biobase (>= 2.5.5)"
+      ],
+      "Imports": [
+        "affyio (>= 1.13.3)",
+        "BiocManager",
+        "graphics",
+        "grDevices",
+        "methods",
+        "preprocessCore",
+        "stats",
+        "utils",
+        "zlibbioc"
+      ],
+      "Suggests": [
+        "tkWidgets (>= 1.19.0)",
+        "affydata",
+        "widgetTools",
+        "hgu95av2cdf"
+      ],
+      "LinkingTo": [
+        "preprocessCore"
+      ],
+      "Description": "The package contains functions for exploratory oligonucleotide array analysis. The dependence on tkWidgets only concerns few convenience functions. 'affy' is fully functional without it.",
+      "License": "LGPL (>= 2.0)",
+      "Collate": "ProgressBarText.R ppset.ttest.R ppsetApply.R expressoWidget.R getCDFenv.R AffyRNAdeg.R avdiff.R barplot.ProbeSet.R bg.Affy.chipwide.R bg.R expresso.R fit.li.wong.R generateExprVal.method.avgdiff.R generateExprVal.method.liwong.R generateExprVal.method.mas.R generateExprVal.method.medianpolish.R generateExprVal.method.playerout.R hlog.R justrma.R loess.normalize.R maffy.R mas5.R merge.AffyBatch.R normalize.constant.R normalize.contrasts.R normalize.invariantset.R normalize.loess.R normalize.qspline.R normalize.quantiles.R pairs.AffyBatch.R plot.density.R plotLocation.R plot.ProbeSet.R pmcorrect.mas.R AffyBatch.R mva.pairs.R ProbeSet.R read.affybatch.R rma.R summary.R tukey.biweight.R whatcdf.R xy2indices.R zzz.R",
+      "biocViews": "Microarray, OneChannel, Preprocessing",
+      "LazyLoad": "yes",
+      "git_url": "https://git.bioconductor.org/packages/affy",
+      "git_branch": "RELEASE_3_18",
+      "git_last_commit": "a0d64df",
+      "git_last_commit_date": "2023-10-24",
+      "NeedsCompilation": "yes"
+    },
+    "affyio": {
+      "Package": "affyio",
+      "Version": "1.72.0",
+      "Source": "Bioconductor",
+      "Title": "Tools for parsing Affymetrix data files",
+      "Author": "Ben Bolstad <bmb@bmbolstad.com>",
+      "Maintainer": "Ben Bolstad <bmb@bmbolstad.com>",
+      "Depends": [
+        "R (>= 2.6.0)"
+      ],
+      "Imports": [
+        "zlibbioc",
+        "methods"
+      ],
+      "Description": "Routines for parsing Affymetrix data files based upon file format information. Primary focus is on accessing the CEL and CDF file formats.",
+      "License": "LGPL (>= 2)",
+      "URL": "https://github.com/bmbolstad/affyio",
+      "biocViews": "Microarray, DataImport, Infrastructure",
+      "LazyLoad": "yes",
+      "git_url": "https://git.bioconductor.org/packages/affyio",
+      "git_branch": "RELEASE_3_18",
+      "git_last_commit": "2f97a7e",
+      "git_last_commit_date": "2023-10-24",
+      "NeedsCompilation": "yes"
+    },
     "airway": {
       "Package": "airway",
       "Version": "1.22.0",
@@ -1669,6 +1781,28 @@
       "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
       "Repository": "CRAN"
     },
+    "backports": {
+      "Package": "backports",
+      "Version": "1.5.0",
+      "Source": "Repository",
+      "Type": "Package",
+      "Title": "Reimplementations of Functions Introduced Since R-3.0.0",
+      "Authors@R": "c( person(\"Michel\", \"Lang\", NULL, \"michellang@gmail.com\", role = c(\"cre\", \"aut\"), comment = c(ORCID = \"0000-0001-9754-0393\")), person(\"Duncan\", \"Murdoch\", NULL, \"murdoch.duncan@gmail.com\", role = c(\"aut\")), person(\"R Core Team\", role = \"aut\"))",
+      "Maintainer": "Michel Lang <michellang@gmail.com>",
+      "Description": "Functions introduced or changed since R v3.0.0 are re-implemented in this package. The backports are conditionally exported in order to let R resolve the function name to either the implemented backport, or the respective base version, if available. Package developers can make use of new functions or arguments by selectively importing specific backports to support older installations.",
+      "URL": "https://github.com/r-lib/backports",
+      "BugReports": "https://github.com/r-lib/backports/issues",
+      "License": "GPL-2 | GPL-3",
+      "NeedsCompilation": "yes",
+      "ByteCompile": "yes",
+      "Depends": [
+        "R (>= 3.0.0)"
+      ],
+      "Encoding": "UTF-8",
+      "RoxygenNote": "7.3.1",
+      "Author": "Michel Lang [cre, aut] (<https://orcid.org/0000-0001-9754-0393>), Duncan Murdoch [aut], R Core Team [aut]",
+      "Repository": "CRAN"
+    },
     "base64enc": {
       "Package": "base64enc",
       "Version": "0.1-3",
@@ -1688,6 +1822,37 @@
       "NeedsCompilation": "yes",
       "Repository": "RSPM",
       "Encoding": "UTF-8"
+    },
+    "base64url": {
+      "Package": "base64url",
+      "Version": "1.4",
+      "Source": "Repository",
+      "Type": "Package",
+      "Title": "Fast and URL-Safe Base64 Encoder and Decoder",
+      "Authors@R": "c( person(\"Michel\", \"Lang\", NULL, \"michellang@gmail.com\", role = c(\"cre\", \"aut\"), comment = c(ORCID = \"0000-0001-9754-0393\")), person(NULL, \"Apache Foundation\", NULL, NULL, role = c(\"ctb\", \"cph\")), person(NULL, \"Free Software Foundation\", NULL, NULL, role = c(\"ctb\", \"cph\")) )",
+      "Description": "In contrast to RFC3548, the 62nd character (\"+\") is replaced with \"-\", the 63rd character (\"/\") is replaced with \"_\". Furthermore, the encoder does not fill the string with trailing \"=\". The resulting encoded strings comply to the regular expression pattern \"[A-Za-z0-9_-]\" and thus are safe to use in URLs or for file names. The package also comes with a simple base32 encoder/decoder suited for case insensitive file systems.",
+      "URL": "https://github.com/mllg/base64url",
+      "BugReports": "https://github.com/mllg/base64url/issues",
+      "NeedsCompilation": "yes",
+      "License": "GPL-3",
+      "Encoding": "UTF-8",
+      "Imports": [
+        "backports (>= 1.1.0)"
+      ],
+      "Suggests": [
+        "base64enc",
+        "checkmate",
+        "knitr",
+        "microbenchmark",
+        "openssl",
+        "rmarkdown",
+        "testthat"
+      ],
+      "RoxygenNote": "6.0.1",
+      "VignetteBuilder": "knitr",
+      "Author": "Michel Lang [cre, aut] (<https://orcid.org/0000-0001-9754-0393>), Apache Foundation [ctb, cph], Free Software Foundation [ctb, cph]",
+      "Maintainer": "Michel Lang <michellang@gmail.com>",
+      "Repository": "CRAN"
     },
     "bit": {
       "Package": "bit",
@@ -1889,6 +2054,44 @@
       "Author": "Winston Chang [aut, cre], Posit Software, PBC [cph, fnd]",
       "Maintainer": "Winston Chang <winston@posit.co>",
       "Repository": "RSPM"
+    },
+    "callr": {
+      "Package": "callr",
+      "Version": "3.7.6",
+      "Source": "Repository",
+      "Title": "Call R from R",
+      "Authors@R": "c( person(\"Gábor\", \"Csárdi\", , \"csardi.gabor@gmail.com\", role = c(\"aut\", \"cre\", \"cph\"), comment = c(ORCID = \"0000-0001-7098-9676\")), person(\"Winston\", \"Chang\", role = \"aut\"), person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\")), person(\"Ascent Digital Services\", role = c(\"cph\", \"fnd\")) )",
+      "Description": "It is sometimes useful to perform a computation in a separate R process, without affecting the current R process at all.  This packages does exactly that.",
+      "License": "MIT + file LICENSE",
+      "URL": "https://callr.r-lib.org, https://github.com/r-lib/callr",
+      "BugReports": "https://github.com/r-lib/callr/issues",
+      "Depends": [
+        "R (>= 3.4)"
+      ],
+      "Imports": [
+        "processx (>= 3.6.1)",
+        "R6",
+        "utils"
+      ],
+      "Suggests": [
+        "asciicast (>= 2.3.1)",
+        "cli (>= 1.1.0)",
+        "mockery",
+        "ps",
+        "rprojroot",
+        "spelling",
+        "testthat (>= 3.2.0)",
+        "withr (>= 2.3.0)"
+      ],
+      "Config/Needs/website": "r-lib/asciicast, glue, htmlwidgets, igraph, tibble, tidyverse/tidytemplate",
+      "Config/testthat/edition": "3",
+      "Encoding": "UTF-8",
+      "Language": "en-US",
+      "RoxygenNote": "7.3.1.9000",
+      "NeedsCompilation": "no",
+      "Author": "Gábor Csárdi [aut, cre, cph] (<https://orcid.org/0000-0001-7098-9676>), Winston Chang [aut], Posit Software, PBC [cph, fnd], Ascent Digital Services [cph, fnd]",
+      "Maintainer": "Gábor Csárdi <csardi.gabor@gmail.com>",
+      "Repository": "CRAN"
     },
     "cli": {
       "Package": "cli",
@@ -3510,6 +3713,44 @@
       "Maintainer": "Thomas Lin Pedersen <thomas.pedersen@posit.co>",
       "Repository": "CRAN"
     },
+    "here": {
+      "Package": "here",
+      "Version": "1.0.2",
+      "Source": "Repository",
+      "Title": "A Simpler Way to Find Your Files",
+      "Date": "2025-09-06",
+      "Authors@R": "c(person(given = \"Kirill\", family = \"M\\u00fcller\", role = c(\"aut\", \"cre\"), email = \"kirill@cynkra.com\", comment = c(ORCID = \"0000-0002-1416-3412\")), person(given = \"Jennifer\", family = \"Bryan\", role = \"ctb\", email = \"jenny@rstudio.com\", comment = c(ORCID = \"0000-0002-6983-2759\")))",
+      "Description": "Constructs paths to your project's files. Declare the relative path of a file within your project with 'i_am()'. Use the 'here()' function as a drop-in replacement for 'file.path()', it will always locate the files relative to your project root.",
+      "License": "MIT + file LICENSE",
+      "URL": "https://here.r-lib.org/, https://github.com/r-lib/here",
+      "BugReports": "https://github.com/r-lib/here/issues",
+      "Imports": [
+        "rprojroot (>= 2.1.0)"
+      ],
+      "Suggests": [
+        "conflicted",
+        "covr",
+        "fs",
+        "knitr",
+        "palmerpenguins",
+        "plyr",
+        "readr",
+        "rlang",
+        "rmarkdown",
+        "testthat",
+        "uuid",
+        "withr"
+      ],
+      "VignetteBuilder": "knitr",
+      "Encoding": "UTF-8",
+      "RoxygenNote": "7.3.3.9000",
+      "Config/testthat/edition": "3",
+      "Config/Needs/website": "tidyverse/tidytemplate",
+      "NeedsCompilation": "no",
+      "Author": "Kirill Müller [aut, cre] (ORCID: <https://orcid.org/0000-0002-1416-3412>), Jennifer Bryan [ctb] (ORCID: <https://orcid.org/0000-0002-6983-2759>)",
+      "Maintainer": "Kirill Müller <kirill@cynkra.com>",
+      "Repository": "CRAN"
+    },
     "highr": {
       "Package": "highr",
       "Version": "0.11",
@@ -4031,6 +4272,53 @@
       "Maintainer": "Lionel Henry <lionel@posit.co>",
       "Repository": "CRAN"
     },
+    "limma": {
+      "Package": "limma",
+      "Version": "3.58.1",
+      "Source": "Bioconductor",
+      "Date": "2023-10-31",
+      "Title": "Linear Models for Microarray Data",
+      "Description": "Data analysis, linear models and differential expression for microarray data.",
+      "Author": "Gordon Smyth [cre,aut], Yifang Hu [ctb], Matthew Ritchie [ctb], Jeremy Silver [ctb], James Wettenhall [ctb], Davis McCarthy [ctb], Di Wu [ctb], Wei Shi [ctb], Belinda Phipson [ctb], Aaron Lun [ctb], Natalie Thorne [ctb], Alicia Oshlack [ctb], Carolyn de Graaf [ctb], Yunshun Chen [ctb], Mette Langaas [ctb], Egil Ferkingstad [ctb], Marcus Davy [ctb], Francois Pepin [ctb], Dongseok Choi [ctb]",
+      "Maintainer": "Gordon Smyth <smyth@wehi.edu.au>",
+      "License": "GPL (>=2)",
+      "Depends": [
+        "R (>= 3.6.0)"
+      ],
+      "Imports": [
+        "grDevices",
+        "graphics",
+        "stats",
+        "utils",
+        "methods",
+        "statmod"
+      ],
+      "Suggests": [
+        "BiasedUrn",
+        "ellipse",
+        "gplots",
+        "knitr",
+        "locfit",
+        "MASS",
+        "splines",
+        "affy",
+        "AnnotationDbi",
+        "Biobase",
+        "BiocStyle",
+        "GO.db",
+        "illuminaio",
+        "org.Hs.eg.db",
+        "vsn"
+      ],
+      "VignetteBuilder": "knitr",
+      "URL": "https://bioinf.wehi.edu.au/limma/",
+      "biocViews": "ExonArray, GeneExpression, Transcription, AlternativeSplicing, DifferentialExpression, DifferentialSplicing, GeneSetEnrichment, DataImport, Bayesian, Clustering, Regression, TimeCourse, Microarray, MicroRNAArray, mRNAMicroarray, OneChannel, ProprietaryPlatforms, TwoChannel, Sequencing, RNASeq, BatchEffect, MultipleComparison, Normalization, Preprocessing, QualityControl, BiomedicalInformatics, CellBiology, Cheminformatics, Epigenetics, FunctionalGenomics, Genetics, ImmunoOncology, Metabolomics, Proteomics, SystemsBiology, Transcriptomics",
+      "git_url": "https://git.bioconductor.org/packages/limma",
+      "git_branch": "RELEASE_3_18",
+      "git_last_commit": "27e81a0",
+      "git_last_commit_date": "2023-10-30",
+      "NeedsCompilation": "yes"
+    },
     "locfit": {
       "Package": "locfit",
       "Version": "1.5-9.12",
@@ -4518,6 +4806,132 @@
       "Repository": "RSPM",
       "Encoding": "UTF-8"
     },
+    "preprocessCore": {
+      "Package": "preprocessCore",
+      "Version": "1.64.0",
+      "Source": "Bioconductor",
+      "Title": "A collection of pre-processing functions",
+      "Author": "Ben Bolstad <bmb@bmbolstad.com>",
+      "Maintainer": "Ben Bolstad <bmb@bmbolstad.com>",
+      "Imports": [
+        "stats"
+      ],
+      "Description": "A library of core preprocessing routines.",
+      "License": "LGPL (>= 2)",
+      "URL": "https://github.com/bmbolstad/preprocessCore",
+      "Collate": "normalize.quantiles.R quantile_extensions.R rma.background.correct.R rcModel.R colSummarize.R subColSummarize.R plmr.R plmd.R",
+      "LazyLoad": "yes",
+      "biocViews": "Infrastructure",
+      "git_url": "https://git.bioconductor.org/packages/preprocessCore",
+      "git_branch": "RELEASE_3_18",
+      "git_last_commit": "887abd3",
+      "git_last_commit_date": "2023-10-24",
+      "NeedsCompilation": "yes"
+    },
+    "prettyunits": {
+      "Package": "prettyunits",
+      "Version": "1.2.0",
+      "Source": "Repository",
+      "Title": "Pretty, Human Readable Formatting of Quantities",
+      "Authors@R": "c( person(\"Gabor\", \"Csardi\", email=\"csardi.gabor@gmail.com\", role=c(\"aut\", \"cre\")), person(\"Bill\", \"Denney\", email=\"wdenney@humanpredictions.com\", role=c(\"ctb\"), comment=c(ORCID=\"0000-0002-5759-428X\")), person(\"Christophe\", \"Regouby\", email=\"christophe.regouby@free.fr\", role=c(\"ctb\")) )",
+      "Description": "Pretty, human readable formatting of quantities. Time intervals: '1337000' -> '15d 11h 23m 20s'. Vague time intervals: '2674000' -> 'about a month ago'. Bytes: '1337' -> '1.34 kB'. Rounding: '99' with 3 significant digits -> '99.0' p-values: '0.00001' -> '<0.0001'. Colors: '#FF0000' -> 'red'. Quantities: '1239437' -> '1.24 M'.",
+      "License": "MIT + file LICENSE",
+      "URL": "https://github.com/r-lib/prettyunits",
+      "BugReports": "https://github.com/r-lib/prettyunits/issues",
+      "Depends": [
+        "R(>= 2.10)"
+      ],
+      "Suggests": [
+        "codetools",
+        "covr",
+        "testthat"
+      ],
+      "RoxygenNote": "7.2.3",
+      "Encoding": "UTF-8",
+      "NeedsCompilation": "no",
+      "Author": "Gabor Csardi [aut, cre], Bill Denney [ctb] (<https://orcid.org/0000-0002-5759-428X>), Christophe Regouby [ctb]",
+      "Maintainer": "Gabor Csardi <csardi.gabor@gmail.com>",
+      "Repository": "CRAN"
+    },
+    "processx": {
+      "Package": "processx",
+      "Version": "3.8.6",
+      "Source": "Repository",
+      "Title": "Execute and Control System Processes",
+      "Authors@R": "c( person(\"Gábor\", \"Csárdi\", , \"csardi.gabor@gmail.com\", role = c(\"aut\", \"cre\", \"cph\"), comment = c(ORCID = \"0000-0001-7098-9676\")), person(\"Winston\", \"Chang\", role = \"aut\"), person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\")), person(\"Ascent Digital Services\", role = c(\"cph\", \"fnd\")) )",
+      "Description": "Tools to run system processes in the background.  It can check if a background process is running; wait on a background process to finish; get the exit status of finished processes; kill background processes. It can read the standard output and error of the processes, using non-blocking connections. 'processx' can poll a process for standard output or error, with a timeout. It can also poll several processes at once.",
+      "License": "MIT + file LICENSE",
+      "URL": "https://processx.r-lib.org, https://github.com/r-lib/processx",
+      "BugReports": "https://github.com/r-lib/processx/issues",
+      "Depends": [
+        "R (>= 3.4.0)"
+      ],
+      "Imports": [
+        "ps (>= 1.2.0)",
+        "R6",
+        "utils"
+      ],
+      "Suggests": [
+        "callr (>= 3.7.3)",
+        "cli (>= 3.3.0)",
+        "codetools",
+        "covr",
+        "curl",
+        "debugme",
+        "parallel",
+        "rlang (>= 1.0.2)",
+        "testthat (>= 3.0.0)",
+        "webfakes",
+        "withr"
+      ],
+      "Config/Needs/website": "tidyverse/tidytemplate",
+      "Config/testthat/edition": "3",
+      "Encoding": "UTF-8",
+      "RoxygenNote": "7.3.1.9000",
+      "NeedsCompilation": "yes",
+      "Author": "Gábor Csárdi [aut, cre, cph] (<https://orcid.org/0000-0001-7098-9676>), Winston Chang [aut], Posit Software, PBC [cph, fnd], Ascent Digital Services [cph, fnd]",
+      "Maintainer": "Gábor Csárdi <csardi.gabor@gmail.com>",
+      "Repository": "CRAN"
+    },
+    "ps": {
+      "Package": "ps",
+      "Version": "1.9.1",
+      "Source": "Repository",
+      "Title": "List, Query, Manipulate System Processes",
+      "Authors@R": "c( person(\"Jay\", \"Loden\", role = \"aut\"), person(\"Dave\", \"Daeschler\", role = \"aut\"), person(\"Giampaolo\", \"Rodola'\", role = \"aut\"), person(\"Gábor\", \"Csárdi\", , \"csardi.gabor@gmail.com\", role = c(\"aut\", \"cre\")), person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\")) )",
+      "Description": "List, query and manipulate all system processes, on 'Windows', 'Linux' and 'macOS'.",
+      "License": "MIT + file LICENSE",
+      "URL": "https://github.com/r-lib/ps, https://ps.r-lib.org/",
+      "BugReports": "https://github.com/r-lib/ps/issues",
+      "Depends": [
+        "R (>= 3.4)"
+      ],
+      "Imports": [
+        "utils"
+      ],
+      "Suggests": [
+        "callr",
+        "covr",
+        "curl",
+        "pillar",
+        "pingr",
+        "processx (>= 3.1.0)",
+        "R6",
+        "rlang",
+        "testthat (>= 3.0.0)",
+        "webfakes",
+        "withr"
+      ],
+      "Biarch": "true",
+      "Config/Needs/website": "tidyverse/tidytemplate",
+      "Config/testthat/edition": "3",
+      "Encoding": "UTF-8",
+      "RoxygenNote": "7.3.2",
+      "NeedsCompilation": "yes",
+      "Author": "Jay Loden [aut], Dave Daeschler [aut], Giampaolo Rodola' [aut], Gábor Csárdi [aut, cre], Posit Software, PBC [cph, fnd]",
+      "Maintainer": "Gábor Csárdi <csardi.gabor@gmail.com>",
+      "Repository": "CRAN"
+    },
     "purrr": {
       "Package": "purrr",
       "Version": "1.2.1",
@@ -4829,6 +5243,40 @@
       "Maintainer": "Yihui Xie <xie@yihui.name>",
       "Repository": "RSPM"
     },
+    "rprojroot": {
+      "Package": "rprojroot",
+      "Version": "2.1.1",
+      "Source": "Repository",
+      "Title": "Finding Files in Project Subdirectories",
+      "Authors@R": "person(given = \"Kirill\", family = \"M\\u00fcller\", role = c(\"aut\", \"cre\"), email = \"kirill@cynkra.com\", comment = c(ORCID = \"0000-0002-1416-3412\"))",
+      "Description": "Robust, reliable and flexible paths to files below a project root. The 'root' of a project is defined as a directory that matches a certain criterion, e.g., it contains a certain regular file.",
+      "License": "MIT + file LICENSE",
+      "URL": "https://rprojroot.r-lib.org/, https://github.com/r-lib/rprojroot",
+      "BugReports": "https://github.com/r-lib/rprojroot/issues",
+      "Depends": [
+        "R (>= 3.0.0)"
+      ],
+      "Suggests": [
+        "covr",
+        "knitr",
+        "lifecycle",
+        "rlang",
+        "rmarkdown",
+        "testthat (>= 3.2.0)",
+        "withr"
+      ],
+      "VignetteBuilder": "knitr",
+      "Config/testthat/edition": "3",
+      "Encoding": "UTF-8",
+      "RoxygenNote": "7.3.2.9000",
+      "Config/autostyle/scope": "line_breaks",
+      "Config/autostyle/strict": "true",
+      "Config/Needs/website": "tidyverse/tidytemplate",
+      "NeedsCompilation": "no",
+      "Author": "Kirill Müller [aut, cre] (ORCID: <https://orcid.org/0000-0002-1416-3412>)",
+      "Maintainer": "Kirill Müller <kirill@cynkra.com>",
+      "Repository": "CRAN"
+    },
     "sass": {
       "Package": "sass",
       "Version": "0.4.10",
@@ -4947,6 +5395,28 @@
       "Maintainer": "Guangchuang Yu <guangchuangyu@gmail.com>",
       "Repository": "RSPM"
     },
+    "secretbase": {
+      "Package": "secretbase",
+      "Version": "1.1.1",
+      "Source": "Repository",
+      "Type": "Package",
+      "Title": "Cryptographic Hash, Extendable-Output and Binary Encoding Functions",
+      "Authors@R": "c( person(\"Charlie\", \"Gao\", , \"charlie.gao@posit.co\", role = c(\"aut\", \"cre\"), comment = c(ORCID = \"0000-0002-0750-061X\")), person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"), comment = c(ROR = \"03wc8by49\")), person(\"Hibiki AI Limited\", role = \"cph\") )",
+      "Description": "Fast and memory-efficient streaming hash functions, binary encoding and serialization. Hashes strings and raw vectors directly. Stream hashes files which can be larger than memory, as well as in-memory objects through R's serialization mechanism. Implements the SHA-256, SHA-3 and 'Keccak' cryptographic hash functions, SHAKE256 extendable-output function (XOF), 'SipHash' pseudo-random function, base64 and base58 encoding, and 'CBOR' serialization.",
+      "License": "MIT + file LICENSE",
+      "URL": "https://shikokuchuo.net/secretbase/, https://github.com/shikokuchuo/secretbase/",
+      "BugReports": "https://github.com/shikokuchuo/secretbase/issues",
+      "Depends": [
+        "R (>= 3.5)"
+      ],
+      "Config/build/compilation-database": "true",
+      "Encoding": "UTF-8",
+      "RoxygenNote": "7.3.3",
+      "NeedsCompilation": "yes",
+      "Author": "Charlie Gao [aut, cre] (ORCID: <https://orcid.org/0000-0002-0750-061X>), Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>), Hibiki AI Limited [cph]",
+      "Maintainer": "Charlie Gao <charlie.gao@posit.co>",
+      "Repository": "CRAN"
+    },
     "shadowtext": {
       "Package": "shadowtext",
       "Version": "0.1.6",
@@ -5002,6 +5472,32 @@
         "utils"
       ],
       "NeedsCompilation": "no",
+      "Repository": "RSPM",
+      "Encoding": "UTF-8"
+    },
+    "statmod": {
+      "Package": "statmod",
+      "Version": "1.5.1",
+      "Source": "Repository",
+      "Date": "2025-10-08",
+      "Title": "Statistical Modeling",
+      "Authors@R": "c(person(given = \"Gordon\", family = \"Smyth\", role = c(\"cre\", \"aut\"), email = \"smyth@wehi.edu.au\"), person(given = \"Lizhong\", family = \"Chen\", role = \"aut\"), person(given = \"Yifang\", family = \"Hu\", role = \"ctb\"), person(given = \"Peter\", family = \"Dunn\", role = \"ctb\"), person(given = \"Belinda\", family = \"Phipson\", role = \"ctb\"), person(given = \"Yunshun\", family = \"Chen\", role = \"ctb\"))",
+      "Maintainer": "Gordon Smyth <smyth@wehi.edu.au>",
+      "Depends": [
+        "R (>= 3.0.0)"
+      ],
+      "Imports": [
+        "stats",
+        "graphics"
+      ],
+      "Suggests": [
+        "MASS",
+        "tweedie"
+      ],
+      "Description": "A collection of algorithms and functions to aid statistical modeling. Includes limiting dilution analysis (aka ELDA), growth curve comparisons, mixed linear models, heteroscedastic regression, inverse-Gaussian probability calculations, Gauss quadrature and a secure convergence algorithm for nonlinear models. Also includes advanced generalized linear model functions including Tweedie and Digamma distributional families, secure convergence and exact distributional calculations for unit deviances.",
+      "License": "GPL-2 | GPL-3",
+      "NeedsCompilation": "yes",
+      "Author": "Gordon Smyth [cre, aut], Lizhong Chen [aut], Yifang Hu [ctb], Peter Dunn [ctb], Belinda Phipson [ctb], Yunshun Chen [ctb]",
       "Repository": "RSPM",
       "Encoding": "UTF-8"
     },
@@ -5151,6 +5647,87 @@
       "Author": "Thomas Lin Pedersen [aut, cre] (ORCID: <https://orcid.org/0000-0002-5147-4711>), Jeroen Ooms [aut] (ORCID: <https://orcid.org/0000-0002-4035-0289>), Devon Govett [aut] (Author of font-manager), Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)",
       "Maintainer": "Thomas Lin Pedersen <thomas.pedersen@posit.co>",
       "Repository": "RSPM"
+    },
+    "targets": {
+      "Package": "targets",
+      "Version": "1.11.4",
+      "Source": "Repository",
+      "Title": "Dynamic Function-Oriented 'Make'-Like Declarative Pipelines",
+      "Description": "Pipeline tools coordinate the pieces of computationally demanding analysis projects. The 'targets' package is a 'Make'-like pipeline tool for statistics and data science in R. The package skips costly runtime for tasks that are already up to date, orchestrates the necessary computation with implicit parallel computing, and abstracts files as R objects. If all the current output matches the current upstream code and data, then the whole pipeline is up to date, and the results are more trustworthy than otherwise. The methodology in this package borrows from GNU 'Make' (2015, ISBN:978-9881443519) and 'drake' (2018, <doi:10.21105/joss.00550>).",
+      "License": "MIT + file LICENSE",
+      "URL": "https://docs.ropensci.org/targets/, https://github.com/ropensci/targets",
+      "BugReports": "https://github.com/ropensci/targets/issues",
+      "Authors@R": "c( person( given = c(\"William\", \"Michael\"), family = \"Landau\", role = c(\"aut\", \"cre\"), email = \"will.landau.oss@gmail.com\", comment = c(ORCID = \"0000-0003-1878-3253\") ), person( given = c(\"Matthew\", \"T.\"), family = \"Warkentin\", role = \"ctb\" ), person( given = \"Mark\", family = \"Edmondson\", email = \"r@sunholo.com\", role = \"ctb\", comment = c(ORCID = \"0000-0002-8434-3881\") ), person( given = \"Samantha\", family = \"Oliver\", role = \"rev\", comment = c(ORCID = \"0000-0001-5668-1165\") ), person( given = \"Tristan\", family = \"Mahr\", role = \"rev\", comment = c(ORCID = \"0000-0002-8890-5116\") ), person( family = \"Eli Lilly and Company\", role = c(\"cph\", \"fnd\") ))",
+      "Depends": [
+        "R (>= 3.5.0)"
+      ],
+      "Imports": [
+        "base64url (>= 1.4)",
+        "callr (>= 3.7.0)",
+        "cli (>= 2.0.2)",
+        "codetools (>= 0.2.16)",
+        "data.table (>= 1.16.0)",
+        "igraph (>= 2.0.0)",
+        "knitr (>= 1.34)",
+        "prettyunits (>= 1.1.0)",
+        "ps (>= 1.8.0)",
+        "R6 (>= 2.4.1)",
+        "rlang (>= 1.0.0)",
+        "secretbase (>= 0.5.0)",
+        "stats",
+        "tibble (>= 3.0.1)",
+        "tidyselect (>= 1.1.0)",
+        "tools",
+        "utils",
+        "vctrs (>= 0.2.4)",
+        "yaml (>= 2.2.1)"
+      ],
+      "Suggests": [
+        "autometric (>= 0.1.0)",
+        "bslib",
+        "clustermq (>= 0.9.2)",
+        "crew (>= 0.9.0)",
+        "curl (>= 4.3)",
+        "DT (>= 0.14)",
+        "dplyr (>= 1.0.0)",
+        "fst (>= 0.9.2)",
+        "future (>= 1.19.1)",
+        "future.batchtools (>= 0.9.0)",
+        "future.callr (>= 0.6.0)",
+        "gargle (>= 1.2.0)",
+        "googleCloudStorageR (>= 0.7.0)",
+        "gt (>= 0.2.2)",
+        "keras (>= 2.2.5.0)",
+        "markdown (>= 1.1)",
+        "nanonext (>= 0.12.0)",
+        "rmarkdown (>= 2.4)",
+        "parallelly (>= 1.35.0)",
+        "paws.common (>= 0.6.4)",
+        "paws.storage (>= 0.4.0)",
+        "pkgload (>= 1.1.0)",
+        "processx (>= 3.4.3)",
+        "qs2",
+        "reprex (>= 2.0.0)",
+        "rstudioapi (>= 0.11)",
+        "R.utils (>= 2.6.0)",
+        "shiny (>= 1.5.0)",
+        "shinybusy (>= 0.2.2)",
+        "shinyWidgets (>= 0.5.4)",
+        "tarchetypes",
+        "testthat (>= 3.0.0)",
+        "torch (>= 0.1.0)",
+        "usethis (>= 1.6.3)",
+        "visNetwork (>= 2.1.2)"
+      ],
+      "Encoding": "UTF-8",
+      "Language": "en-US",
+      "VignetteBuilder": "knitr",
+      "Config/testthat/edition": "3",
+      "RoxygenNote": "7.3.3",
+      "NeedsCompilation": "no",
+      "Author": "William Michael Landau [aut, cre] (ORCID: <https://orcid.org/0000-0003-1878-3253>), Matthew T. Warkentin [ctb], Mark Edmondson [ctb] (ORCID: <https://orcid.org/0000-0002-8434-3881>), Samantha Oliver [rev] (ORCID: <https://orcid.org/0000-0001-5668-1165>), Tristan Mahr [rev] (ORCID: <https://orcid.org/0000-0002-8890-5116>), Eli Lilly and Company [cph, fnd]",
+      "Maintainer": "William Michael Landau <will.landau.oss@gmail.com>",
+      "Repository": "CRAN"
     },
     "tibble": {
       "Package": "tibble",
@@ -5667,6 +6244,46 @@
       "NeedsCompilation": "no",
       "Author": "Simon Garnier [aut, cre], Noam Ross [ctb, cph], Bob Rudis [ctb, cph], Marco Sciaini [ctb, cph], Antônio Pedro Camargo [ctb, cph], Cédric Scherer [ctb, cph]",
       "Repository": "CRAN"
+    },
+    "vsn": {
+      "Package": "vsn",
+      "Version": "3.70.0",
+      "Source": "Bioconductor",
+      "Title": "Variance stabilization and calibration for microarray data",
+      "Author": "Wolfgang Huber, with contributions from Anja von Heydebreck. Many comments and suggestions by users are acknowledged, among them Dennis Kostka, David Kreil, Hans-Ulrich Klein, Robert Gentleman, Deepayan Sarkar and Gordon Smyth",
+      "Maintainer": "Wolfgang Huber <wolfgang.huber@embl.org>",
+      "Depends": [
+        "R (>= 4.0.0)",
+        "methods",
+        "Biobase"
+      ],
+      "Imports": [
+        "affy",
+        "limma",
+        "lattice",
+        "ggplot2"
+      ],
+      "Suggests": [
+        "affydata",
+        "hgu95av2cdf",
+        "BiocStyle",
+        "knitr",
+        "rmarkdown",
+        "dplyr",
+        "testthat"
+      ],
+      "Description": "The package implements a method for normalising microarray intensities from single- and  multiple-color arrays. It can also be used for data from other technologies, as long as they have similar format. The method uses a robust variant of the maximum-likelihood estimator for an additive-multiplicative error model and affine calibration. The model incorporates data calibration step (a.k.a. normalization), a model for the dependence of the variance on the mean intensity and a variance stabilizing data transformation. Differences between transformed intensities are analogous to \"normalized log-ratios\". However, in contrast to the latter, their variance is independent of the mean, and they are usually more sensitive and specific in detecting differential transcription.",
+      "Reference": "[1] Variance stabilization applied to microarray data calibration and to the quantification of differential expression, Wolfgang Huber, Anja von Heydebreck, Holger Sueltmann, Annemarie Poustka, Martin Vingron; Bioinformatics (2002) 18 Suppl1 S96-S104. [2] Parameter estimation for the calibration and variance stabilization of microarray data, Wolfgang Huber, Anja von Heydebreck, Holger Sueltmann, Annemarie Poustka, and Martin Vingron; Statistical Applications in Genetics and Molecular Biology (2003) Vol. 2 No. 1, Article 3; http://www.bepress.com/sagmb/vol2/iss1/art3.",
+      "License": "Artistic-2.0",
+      "URL": "http://www.r-project.org, http://www.ebi.ac.uk/huber",
+      "biocViews": "Microarray, OneChannel, TwoChannel, Preprocessing",
+      "VignetteBuilder": "knitr",
+      "Collate": "AllClasses.R AllGenerics.R vsn2.R vsnLogLik.R justvsn.R methods-vsnInput.R methods-vsn.R methods-vsn2.R methods-predict.R RGList_to_NChannelSet.R meanSdPlot-methods.R plotLikelihood.R normalize.AffyBatch.vsn.R sagmbSimulateData.R zzz.R",
+      "git_url": "https://git.bioconductor.org/packages/vsn",
+      "git_branch": "RELEASE_3_18",
+      "git_last_commit": "a0a0c6d",
+      "git_last_commit_date": "2023-10-24",
+      "NeedsCompilation": "yes"
     },
     "withr": {
       "Package": "withr",
