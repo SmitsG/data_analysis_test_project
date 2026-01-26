@@ -1,270 +1,296 @@
 # ==============================================
-# Airway DESeq2 + GSEA Analysis
+# Airway DESeq2 + Enrichment Pipeline (Improved)
 # ==============================================
 
 # -----------------------------
-# Load required libraries
+# 0) Setup: packages + folders
 # -----------------------------
-library(airway)
-library(DESeq2)
-library(pheatmap)
-library(ggplot2)
-library(RColorBrewer)
-library(clusterProfiler)
-library(org.Hs.eg.db)
-library(SummarizedExperiment)
-library(EnhancedVolcano)
-library(KEGGREST)
-library(enrichplot)
-library(DOSE)
-library(here)
-library(vsn)
-library(dplyr)
+suppressPackageStartupMessages({
+  library(airway)
+  library(DESeq2)
+  library(SummarizedExperiment)
+  library(ggplot2)
+  library(pheatmap)
+  library(RColorBrewer)
+  library(clusterProfiler)
+  library(org.Hs.eg.db)
+  library(AnnotationDbi)
+  library(enrichplot)
+  library(DOSE)
+  library(EnhancedVolcano)
+  library(vsn)
+  library(matrixStats)
+  library(dplyr)
+  library(here)
+})
 
-# -----------------------------
-# Step 0: Settings & Parameters
-# -----------------------------
-pval_cutoff <- 0.05
-fc_cutoff <- 1.5
-top_n_genes <- 20
-gsea_showCategory <- 15
-ma_lfc_threshold <- 0.5
-kegg_gsea_pvalue <- 0.2
+# Create output dirs (safe if already exist)
+dir.create(here("plots"), showWarnings = FALSE, recursive = TRUE)
+dir.create(here("results"), showWarnings = FALSE, recursive = TRUE)
 
-# -----------------------------
-# Step 1: Load required packages
-# -----------------------------
-required_packages <- c("airway","DESeq2","pheatmap","ggplot2","RColorBrewer",
-                       "clusterProfiler","org.Hs.eg.db","SummarizedExperiment",
-                       "EnhancedVolcano","KEGGREST","enrichplot","DOSE","here",
-                       "vsn","dplyr")
-for(pkg in required_packages) {
-  if(!requireNamespace(pkg, quietly = TRUE)) install.packages(pkg)
-  library(pkg, character.only = TRUE)
+# Helper: safe ggsave
+save_plot <- function(plot_obj, filename, w = 7, h = 5) {
+  ggplot2::ggsave(here("plots", filename), plot = plot_obj, width = w, height = h)
+  invisible(here("plots", filename))
+}
+
+# Helper: save base plot to png
+save_png <- function(filename, expr, width = 1000, height = 800) {
+  grDevices::png(here("plots", filename), width = width, height = height)
+  on.exit(grDevices::dev.off(), add = TRUE)
+  force(expr)
+  invisible(here("plots", filename))
+}
+
+# Helper: assert a condition with readable message
+assert_that <- function(cond, msg) {
+  if (!isTRUE(cond)) stop(msg, call. = FALSE)
 }
 
 # -----------------------------
-# Step 2: Setup directories
-# -----------------------------
-dirs <- c("plots","results")
-for(d in dirs){
-  if(!dir.exists(here::here(d))) dir.create(here::here(d))
-}
-
-# -----------------------------
-# Step 3: Load airway dataset
+# 1) Load dataset + inspect
 # -----------------------------
 data("airway")
-colData(airway)
+message("Samples: ", ncol(airway), " | Genes: ", nrow(airway))
+print(colData(airway))
 
 # -----------------------------
-# Step 4: Create DESeq2 dataset
+# 2) Build DESeq2 dataset
 # -----------------------------
 dds <- DESeqDataSet(airway, design = ~ dex)
+
+# Prefilter: remove very low count genes
 dds <- dds[rowSums(counts(dds)) > 1, ]
 
-# -----------------------------
-# Step 5: Run DESeq2 & results
-# -----------------------------
+# Run DESeq2
 dds <- DESeq(dds)
+
+# Results (default: dex treated vs untreated)
 res <- results(dds)
 resOrdered <- res[order(res$pvalue), ]
-write.csv(as.data.frame(resOrdered), here::here("results","Airway_DESeq2_results.csv"))
+
+# Save DE results table
+write.csv(as.data.frame(resOrdered), here("results", "Airway_DESeq2_results.csv"))
+
+# Optional: LFC shrinkage (recommended for nicer ranking/plots)
+# Uses DESeq2's built-in shrinkers; type="apeglm" requires apeglm installed.
+res_shrunk <- tryCatch(
+  lfcShrink(dds, coef = "dex_trt_vs_untrt", type = "apeglm"),
+  error = function(e) {
+    message("lfcShrink(apeglm) not available (install apeglm). Using normal results.")
+    res
+  }
+)
+write.csv(as.data.frame(res_shrunk[order(res_shrunk$pvalue), ]), here("results", "Airway_DESeq2_results_shrunk.csv"))
 
 # -----------------------------
-# Step 6: Transformations
+# 3) Transformations for QC/plots
 # -----------------------------
 vsd <- vst(dds, blind = TRUE)
 rld <- rlog(dds, blind = TRUE)
 
 # -----------------------------
-# Step 7: PCA Plot Function
+# 4) QC plots
 # -----------------------------
-plot_pca <- function(rld_obj, group_var="dex", filename="PCA_plot.png"){
-  pca_data <- plotPCA(rld_obj, intgroup=group_var, returnData=TRUE)
-  percentVar <- round(100 * attr(pca_data, "percentVar"))
-  p <- ggplot(pca_data, aes(PC1, PC2, color = !!sym(group_var))) +
-    geom_point(size=4) +
-    xlab(paste0("PC1: ", percentVar[1], "% variance")) +
-    ylab(paste0("PC2: ", percentVar[2], "% variance")) +
-    ggtitle("PCA of Airway Samples") + theme_minimal()
-  ggsave(here::here("plots", filename), plot=p, width=7, height=5)
-  return(p)
-}
-pca_plot <- plot_pca(rld)
 
-# -----------------------------
-# Step 8: MA Plot Function
-# -----------------------------
-plot_ma <- function(res_obj, filename="MA_plot.png", main_title="MA Plot"){
-  plotMA(res_obj, main=main_title)
-  ggsave(here::here("plots", filename), width=7, height=5)
-}
-plot_ma(res)
+# 4a) PCA
+pca_data <- plotPCA(rld, intgroup = "dex", returnData = TRUE)
+percentVar <- round(100 * attr(pca_data, "percentVar"))
+pca_plot <- ggplot(pca_data, aes(PC1, PC2, color = dex)) +
+  geom_point(size = 4) +
+  xlab(paste0("PC1: ", percentVar[1], "% variance")) +
+  ylab(paste0("PC2: ", percentVar[2], "% variance")) +
+  ggtitle("PCA (rlog) - Airway") +
+  theme_minimal()
+save_plot(pca_plot, "PCA_plot.png")
 
-# -----------------------------
-# Step 9: Top Variable Genes Heatmap
-# -----------------------------
-topGenes <- head(order(rowVars(assay(vsd)), decreasing = TRUE), top_n_genes)
-mat <- assay(vsd)[topGenes, ]
-mat <- mat - rowMeans(mat)
-pheatmap(mat,
-         annotation_col = as.data.frame(colData(dds)[, "dex", drop=FALSE]),
-         main = "Top 20 Variable Genes Heatmap",
-         color = colorRampPalette(rev(brewer.pal(9,"RdBu")))(255),
-         filename = here::here("plots","Top20_VariableGenes_Heatmap.png"))
+# 4b) MA plot (base plot -> png)
+save_png("MA_plot.png", plotMA(res, main = "MA plot - Airway"))
 
-# -----------------------------
-# Step 10: Volcano Plot
-# -----------------------------
-volcano_plot <- EnhancedVolcano(res,
-                                lab = rownames(res),
-                                x = 'log2FoldChange',
-                                y = 'pvalue',
-                                pCutoff = pval_cutoff,
-                                FCcutoff = fc_cutoff,
-                                title = "Volcano plot of DE genes")
-ggsave(here::here("plots","Volcano_plot.png"), plot=volcano_plot, width=7, height=5)
-
-# -----------------------------
-# Step 11: Sample Distance Heatmap
-# -----------------------------
+# 4c) Sample-to-sample distance heatmap
 sampleDists <- dist(t(assay(vsd)))
 sampleDistMatrix <- as.matrix(sampleDists)
-colors <- colorRampPalette(rev(brewer.pal(9,"Blues")))(255)
-pheatmap(sampleDistMatrix,
-         col=colors,
-         main="Sample-to-sample distance heatmap",
-         filename = here::here("plots","Sample_distance_heatmap.png"))
+dist_cols <- colorRampPalette(rev(brewer.pal(9, "Blues")))(255)
+pheatmap(
+  sampleDistMatrix,
+  col = dist_cols,
+  main = "Sample-to-sample distance (VST)",
+  filename = here("plots", "Sample_distance_heatmap.png")
+)
+
+# 4d) Mean-SD plots
+ms_vsd <- meanSdPlot(assay(vsd))$gg + ggtitle("Mean-SD (VST)")
+ms_rld <- meanSdPlot(assay(rld))$gg + ggtitle("Mean-SD (rlog)")
+save_plot(ms_vsd, "MeanSD_VST.png")
+save_plot(ms_rld, "MeanSD_RLD.png")
+
+# 4e) Cook's distance (influential counts)
+save_png("Cooks_distance_boxplot.png", {
+  boxplot(log10(assays(dds)[["cooks"]]), main = "Log10 Cook's distances", las = 2)
+})
+
+# 4f) Dispersion plot
+save_png("Dispersion_plot.png", plotDispEsts(dds, main = "Dispersion estimates"))
+
+# 4g) Top variable genes heatmap (top 20)
+topGenes <- head(order(rowVars(assay(vsd)), decreasing = TRUE), 20)
+mat_top <- assay(vsd)[topGenes, , drop = FALSE]
+mat_top <- mat_top - rowMeans(mat_top)
+ann <- as.data.frame(colData(dds)[, "dex", drop = FALSE])
+pheatmap(
+  mat_top,
+  annotation_col = ann,
+  main = "Top 20 variable genes (VST)",
+  color = colorRampPalette(rev(brewer.pal(9, "RdBu")))(255),
+  filename = here("plots", "Top20_VariableGenes_Heatmap.png")
+)
 
 # -----------------------------
-# Step 12: Identify significant genes
+# 5) Volcano plot (use shrunk LFC if available)
 # -----------------------------
-sig_genes_up <- rownames(res)[which(res$padj < pval_cutoff & res$log2FoldChange > 0)]
-sig_genes_down <- rownames(res)[which(res$padj < pval_cutoff & res$log2FoldChange < 0)]
-write.csv(sig_genes_up, here::here("results","Upregulated_genes.csv"), row.names=FALSE)
-write.csv(sig_genes_down, here::here("results","Downregulated_genes.csv"), row.names=FALSE)
+volcano <- EnhancedVolcano(
+  res_shrunk,
+  lab = rownames(res_shrunk),
+  x = "log2FoldChange",
+  y = "pvalue",
+  pCutoff = 0.05,
+  FCcutoff = 1.5,
+  title = "Volcano plot - Airway (LFC shrink if available)"
+)
+save_plot(volcano, "Volcano_plot.png", w = 7, h = 5)
 
 # -----------------------------
-# Step 13: GO Enrichment
+# 6) Define significant gene sets (up/down)
 # -----------------------------
-ego <- enrichGO(gene = sig_genes_up,
-                OrgDb = org.Hs.eg.db,
-                keyType = "ENSEMBL",
-                ont = "BP",
-                pAdjustMethod = "BH",
-                qvalueCutoff = pval_cutoff)
-dotplot(ego, showCategory = 10) + ggtitle("GO Enrichment - Upregulated Genes")
-ggsave(here::here("plots","GO_Enrichment_Dotplot.png"), width=7, height=5)
+sig_up <- rownames(res)[which(res$padj < 0.05 & res$log2FoldChange > 0)]
+sig_down <- rownames(res)[which(res$padj < 0.05 & res$log2FoldChange < 0)]
+
+write.csv(data.frame(ENSEMBL = sig_up), here("results", "Upregulated_genes.csv"), row.names = FALSE)
+write.csv(data.frame(ENSEMBL = sig_down), here("results", "Downregulated_genes.csv"), row.names = FALSE)
 
 # -----------------------------
-# Step 14: KEGG Enrichment
+# 7) GO ORA (upregulated)
 # -----------------------------
-ensembl_genes_clean <- gsub("\\..*$","",rownames(res))
-entrez_map <- bitr(ensembl_genes_clean, fromType="ENSEMBL", toType="ENTREZID", OrgDb=org.Hs.eg.db)
-gene_list_entrez <- res$log2FoldChange[match(entrez_map$ENSEMBL, ensembl_genes_clean)]
-names(gene_list_entrez) <- entrez_map$ENTREZID
-gene_list_entrez <- sort(na.omit(gene_list_entrez[!duplicated(names(gene_list_entrez))]), decreasing=TRUE)
+ego <- enrichGO(
+  gene = sig_up,
+  OrgDb = org.Hs.eg.db,
+  keyType = "ENSEMBL",
+  ont = "BP",
+  pAdjustMethod = "BH",
+  qvalueCutoff = 0.05
+)
+write.csv(as.data.frame(ego), here("results", "GO_ORA_upregulated.csv"), row.names = FALSE)
 
-kegg_res <- enrichKEGG(gene = names(gene_list_entrez),
-                       organism = "hsa", keyType="ncbi-geneid", pvalueCutoff=pval_cutoff)
-dotplot(kegg_res, showCategory=10) + ggtitle("KEGG Pathway Enrichment")
-ggsave(here::here("plots","KEGG_Enrichment_Dotplot.png"), width=7, height=5)
+go_dot <- dotplot(ego, showCategory = 10) + ggtitle("GO BP ORA - Upregulated")
+save_plot(go_dot, "GO_Enrichment_Dotplot.png", w = 8, h = 6)
 
-# -----------------------------
-# Step 15: GSEA GO
-# -----------------------------
-gse_res <- gseGO(geneList = gene_list_entrez,
-                 OrgDb = org.Hs.eg.db,
-                 ont = "BP",
-                 keyType = "ENTREZID",
-                 eps=1e-300)
-ridge_go <- ridgeplot(gse_res, showCategory=gsea_showCategory) +
-  labs(x="Enrichment distribution", title="GO Enrichment Ridgeplot")
-ggsave(here::here("plots","GSEA_GO_ridgeplot.png"), plot=ridge_go, width=8, height=6)
+# GO term network + emap
+ego_simplified <- simplify(ego, cutoff = 0.7, by = "p.adjust", select_fun = min)
+ego_sim <- pairwise_termsim(ego_simplified)
 
-# -----------------------------
-# Step 16: GSEA KEGG
-# -----------------------------
-gse_kegg <- gseKEGG(geneList = gene_list_entrez,
-                    organism="hsa", keyType="ncbi-geneid",
-                    pvalueCutoff=kegg_gsea_pvalue,
-                    minGSSize=10, maxGSSize=500)
-ridge_kegg <- ridgeplot(gse_kegg, showCategory=gsea_showCategory) +
-  labs(x="Enrichment distribution", title="KEGG Enrichment Ridgeplot")
-ggsave(here::here("plots","GSEA_KEGG_ridgeplot.png"), plot=ridge_kegg, width=8, height=6)
+go_emap <- emapplot(ego_sim, showCategory = 10) + ggtitle("GO functional clusters (emapplot)")
+save_plot(go_emap, "GO_emapplot.png", w = 10, h = 8)
 
-dot_go <- dotplot(gse_res, showCategory=10, split=".sign") + DOSE::facet_grid(.~.sign)
-dot_kegg <- dotplot(gse_kegg, showCategory=10, split=".sign") + DOSE::facet_grid(.~.sign)
-ggsave(here::here("plots","GSEA_GO_dotplot_sign.png"), plot=dot_go, width=8, height=6)
-ggsave(here::here("plots","GSEA_KEGG_dotplot_sign.png"), plot=dot_kegg, width=8, height=6)
+go_cnet <- cnetplot(ego, showCategory = 5) + ggtitle("GO cnetplot (top 5)")
+save_plot(go_cnet, "GO_cnetplot.png", w = 10, h = 8)
 
 # -----------------------------
-# Step 17: Mean-SD Plots
+# 8) Map ENSEMBL -> ENTREZ and run KEGG ORA + GSEA
 # -----------------------------
-vsd_meanSD <- meanSdPlot(assay(vsd))$gg + ggtitle("Mean-SD Plot (VST)")
-rld_meanSD <- meanSdPlot(assay(rld))$gg + ggtitle("Mean-SD Plot (RLD)")
-ntd_meanSD <- meanSdPlot(assay(dds))$gg + ggtitle("Mean-SD Plot (untransformed)")
-ggsave(here::here("plots","MeanSD_VST.png"), plot=vsd_meanSD, width=7, height=5)
-ggsave(here::here("plots","MeanSD_RLD.png"), plot=rld_meanSD, width=7, height=5)
-ggsave(here::here("plots","MeanSD_NTD.png"), plot=ntd_meanSD, width=7, height=5)
+ensembl_clean <- gsub("\\..*$", "", rownames(res))
+entrez_map <- bitr(
+  ensembl_clean,
+  fromType = "ENSEMBL",
+  toType = "ENTREZID",
+  OrgDb = org.Hs.eg.db
+)
+
+# Build ranked Entrez list using shrunk LFC if possible
+lfc_rank <- res_shrunk$log2FoldChange[match(entrez_map$ENSEMBL, ensembl_clean)]
+names(lfc_rank) <- entrez_map$ENTREZID
+
+# Clean ranked list: drop NA, drop duplicates, sort decreasing
+lfc_rank <- lfc_rank[!is.na(lfc_rank)]
+lfc_rank <- lfc_rank[!duplicated(names(lfc_rank))]
+lfc_rank <- sort(lfc_rank, decreasing = TRUE)
+
+assert_that(length(lfc_rank) > 1000, "Ranked Entrez list is unexpectedly small; mapping failed?")
+
+# Save ranked list (with SYMBOL column)
+symbols <- mapIds(org.Hs.eg.db, keys = names(lfc_rank), column = "SYMBOL",
+                  keytype = "ENTREZID", multiVals = "first")
+ranked_df <- data.frame(EntrezID = names(lfc_rank), Symbol = unname(symbols), log2FC = as.numeric(lfc_rank))
+write.csv(ranked_df, here("results", "Ranked_Genes_for_GSEA_with_SYMBOL.csv"), row.names = FALSE)
+
+# KEGG ORA (uses Entrez IDs)
+kegg_ora <- enrichKEGG(
+  gene = names(lfc_rank),
+  organism = "hsa",
+  keyType = "ncbi-geneid",
+  pvalueCutoff = 0.05
+)
+write.csv(as.data.frame(kegg_ora), here("results", "KEGG_ORA.csv"), row.names = FALSE)
+
+kegg_dot <- dotplot(kegg_ora, showCategory = 10) + ggtitle("KEGG ORA")
+save_plot(kegg_dot, "KEGG_Enrichment_Dotplot.png", w = 8, h = 6)
+
+# GSEA GO (Entrez list)
+gse_go <- gseGO(
+  geneList = lfc_rank,
+  OrgDb = org.Hs.eg.db,
+  ont = "BP",
+  keyType = "ENTREZID",
+  eps = 1e-300
+)
+write.csv(as.data.frame(gse_go), here("results", "GO_GSEA.csv"), row.names = FALSE)
+
+# GSEA KEGG
+gse_kegg <- gseKEGG(
+  geneList = lfc_rank,
+  organism = "hsa",
+  keyType = "ncbi-geneid",
+  pvalueCutoff = 0.2,
+  minGSSize = 10,
+  maxGSSize = 500
+)
+write.csv(as.data.frame(gse_kegg), here("results", "KEGG_GSEA.csv"), row.names = FALSE)
+
+# Ridgeplots + dotplots (split sign)
+ridge_go <- ridgeplot(gse_go, showCategory = 15) + ggtitle("GSEA GO ridgeplot")
+ridge_kegg <- ridgeplot(gse_kegg, showCategory = 15) + ggtitle("GSEA KEGG ridgeplot")
+save_plot(ridge_go, "GSEA_GO_ridgeplot.png", w = 9, h = 6)
+save_plot(ridge_kegg, "GSEA_KEGG_ridgeplot.png", w = 9, h = 6)
+
+dot_go_sign <- dotplot(gse_go, showCategory = 10, split = ".sign") + DOSE::facet_grid(.~.sign)
+dot_kegg_sign <- dotplot(gse_kegg, showCategory = 10, split = ".sign") + DOSE::facet_grid(.~.sign)
+save_plot(dot_go_sign, "GSEA_GO_dotplot_sign.png", w = 10, h = 6)
+save_plot(dot_kegg_sign, "GSEA_KEGG_dotplot_sign.png", w = 10, h = 6)
 
 # -----------------------------
-# Step 18: Cook's distance
+# 9) One PDF report with all key plots
 # -----------------------------
-png(here::here("plots","Cooks_distance_boxplot.png"), width=800, height=600)
-boxplot(log10(assays(dds)[["cooks"]]), main="Log10 Cooks Distance")
+pdf(here("plots", "Airway_DE_Analysis_All_Plots.pdf"), width = 10, height = 8)
+
+print(pca_plot)
+plotMA(res, main = "MA plot - Airway")
+
+print(volcano)
+
+pheatmap(mat_top,
+         annotation_col = ann,
+         main = "Top 20 variable genes (VST)",
+         color = colorRampPalette(rev(brewer.pal(9, "RdBu")))(255))
+
+pheatmap(sampleDistMatrix, col = dist_cols, main = "Sample-to-sample distance (VST)")
+
+print(go_dot)
+print(kegg_dot)
+print(ms_vsd); print(ms_rld)
+print(ridge_go); print(ridge_kegg)
+print(dot_go_sign); print(dot_kegg_sign)
+print(go_emap)
+print(go_cnet)
+
 dev.off()
 
-# -----------------------------
-# Step 19: Dispersion plot
-# -----------------------------
-png(here::here("plots","Dispersion_plot.png"), width=800, height=600)
-plotDispEsts(dds, main="Dispersion Estimates")
-dev.off()
-
-# -----------------------------
-# Step 20: Multi-panel MA plots
-# -----------------------------
-resGA <- results(dds, lfcThreshold=ma_lfc_threshold, altHypothesis="greaterAbs")
-resLA <- results(dds, lfcThreshold=ma_lfc_threshold, altHypothesis="lessAbs")
-resG  <- results(dds, lfcThreshold=ma_lfc_threshold, altHypothesis="greater")
-resL  <- results(dds, lfcThreshold=ma_lfc_threshold, altHypothesis="less")
-drawLines <- function() abline(h=c(-0.5,0.5), col="dodgerblue", lwd=2)
-png(here::here("plots","MA_multi_panel.png"), width=1200, height=800)
-par(mfrow=c(2,2), mar=c(2,2,1,1))
-plotMA(resGA); drawLines()
-plotMA(resLA); drawLines()
-plotMA(resG); drawLines()
-plotMA(resL); drawLines()
-dev.off()
-
-# -----------------------------
-# Step 21: ORA full enrichment map
-# -----------------------------
-ego_full <- enrichGO(gene = rownames(res)[res$padj < pval_cutoff],
-                     OrgDb=org.Hs.eg.db, keyType="ENSEMBL", ont="BP")
-ego_sim_full <- pairwise_termsim(ego_full)
-emap_full <- emapplot(ego_sim_full, showCategory=10) + ggtitle("Full ORA Enrichment Map")
-ggsave(here::here("plots","ORA_full_enrichment_map.png"), plot=emap_full, width=10, height=8)
-
-# -----------------------------
-# Step 22: Save all key plots in single PDF
-# -----------------------------
-pdf(here::here("plots","Airway_DE_Analysis_All_Plots.pdf"), width=10, height=8)
-print(volcano_plot)
-pheatmap(mat,
-         annotation_col = as.data.frame(colData(dds)[, "dex", drop=FALSE]),
-         main="Top 20 Variable Genes Heatmap",
-         color=colorRampPalette(rev(brewer.pal(9,"RdBu")))(255))
-print(dotplot(ego, showCategory=10) + ggtitle("GO Enrichment - Upregulated Genes"))
-print(dotplot(kegg_res, showCategory=10) + ggtitle("KEGG Pathway Enrichment"))
-print(vsd_meanSD)
-print(rld_meanSD)
-print(ntd_meanSD)
-print(ridge_go)
-print(ridge_kegg)
-print(dot_go)
-print(dot_kegg)
-print(emap_full)
-dev.off()
+message("Done. Outputs saved to: ", here("plots"), " and ", here("results"))
