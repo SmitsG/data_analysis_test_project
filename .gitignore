@@ -1,4 +1,16 @@
-.Rproj.user
+
+.Ruserdata
 .Rhistory
 .RData
-.Ruserdata
+.Rproj.user/
+.DS_Store
+
+# outputs
+plots/*
+results/*
+!plots/.gitkeep
+!results/.gitkeep
+
+# renv
+renv/library/
+renv/python/
