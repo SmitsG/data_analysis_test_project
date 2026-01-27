@@ -1,0 +1,78 @@
+cff-version: 1.2.0
+
+message: >
+  If you use this pipeline for RNA-seq data analysis, interpretation,
+  or as part of a publication or thesis, please cite it as described below.
+
+title: >
+  A reproducible downstream analysis framework for bulk RNA-seq
+  using DESeq2 and functional enrichment
+
+abstract: >
+  This repository provides a reproducible, interpretation-focused
+  downstream analysis pipeline for bulk RNA-seq experiments.
+  The framework integrates DESeq2-based differential expression,
+  comprehensive quality control, functional enrichment analysis
+  (GO and KEGG over-representation analysis and GSEA),
+  and publication-ready visualization and reporting.
+  The pipeline is designed as a transparent and extensible analysis
+  template for PhD students and researchers, emphasizing biological
+  correctness, reproducibility, and interpretability rather than
+  black-box execution.
+
+version: 1.0.0
+date-released: 2026-01-27
+
+authors:
+  - family-names: Smits
+    given-names: Gerwin
+    affiliation: Independent researcher
+
+repository-code: https://github.com/SmitsG/rnaseq-downstream
+repository-artifact: https://github.com/SmitsG/rnaseq-downstream/releases/tag/v1.0.0
+
+keywords:
+  - RNA-seq
+  - bulk RNA-seq
+  - downstream analysis
+  - differential expression
+  - DESeq2
+  - functional enrichment
+  - GSEA
+  - reproducible research
+  - bioinformatics workflow
+
+license: MIT
+
+references:
+  - type: article
+    title: Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2
+    authors:
+      - family-names: Love
+        given-names: Michael I.
+      - family-names: Huber
+        given-names: Wolfgang
+      - family-names: Anders
+        given-names: Simon
+    journal: Genome Biology
+    year: 2014
+    volume: 15
+    pages: 550
+    doi: 10.1186/s13059-014-0550-8
+
+  - type: article
+    title: clusterProfiler: an R package for comparing biological themes among gene clusters
+    authors:
+      - family-names: Yu
+        given-names: Guangchuang
+      - family-names: Wang
+        given-names: Li-Gen
+      - family-names: Han
+        given-names: Yanyan
+      - family-names: He
+        given-names: Qing-Yu
+    journal: OMICS
+    year: 2012
+    volume: 16
+    pages: 284–287
+    doi: 10.1089/omi.2011.0118
