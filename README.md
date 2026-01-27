@@ -99,9 +99,25 @@ The main entry point is a single function:
 
 **run_airway_pipeline**
 
+By default, the pipeline is run as a linear script, which is the most readable and beginner-friendly option:
+source("scripts/run_airway_pipeline.R")
+
 Running this function executes the complete workflow, including differential expression, QC, enrichment analyses, and reporting. All outputs are written to the `plots/` and `results/` directories.
 
 All other functions in the `R/` directory are **internal helpers** and are not intended to be called directly by users.
+
+**Optional: Using the targets pipeline**
+
+For advanced users or repeated analyses, an optional targets workflow is provided.
+
+The targets package enables:
+
+* automatic caching of intermediate results
+* skipping recomputation when code or inputs have not changed
+* safer reruns during development or iterative analysis
+
+install.packages("targets")
+targets::tar_make()
 
 ---
 
@@ -173,12 +189,10 @@ The `renv.lock` file records the exact dependency versions used for the analysis
 
 ## Citation
 
-If you use or adapt this pipeline, please cite:
-- Love et al., 2014 — DESeq2
-- Yu et al., 2012 — clusterProfiler
-- This repository (GitHub URL)
+If you use this pipeline in a publication or thesis, please cite the repository.
+A `CITATION.cff` file is provided for convenience and can be accessed via the
+" Cite this repository " button on GitHub.
 
-A `CITATION.cff` file is recommended for formal citation.
 
 ---
 
