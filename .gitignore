@@ -14,3 +14,6 @@ results/*
 # renv
 renv/library/
 renv/python/
+
+_targets/
+
